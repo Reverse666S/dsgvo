@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pikachu Bot – Your Ultimate Discord Companion</title>
+  <title>Ticket System Bot – Professional Discord Ticket Management</title>
   <style>
     * {
       margin: 0;
@@ -13,222 +13,335 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(-45deg, #5f2cff, #3aa0ff, #2c7aff, #5f2cff);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      background: #0a0e27;
       color: #ffffff;
       scroll-behavior: smooth;
+      overflow-x: hidden;
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Animated Background */
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
 
     /* Navigation */
     nav {
       position: sticky;
       top: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      padding: 15px 30px;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 20px 50px;
       z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     }
 
     .nav-brand {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: bold;
-      color: #fff;
+      color: #60a5fa;
       text-decoration: none;
+      text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+      transition: all 0.3s;
+    }
+
+    .nav-brand:hover {
+      text-shadow: 0 0 30px rgba(96, 165, 250, 0.8);
+      transform: scale(1.05);
     }
 
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 30px;
       align-items: center;
     }
 
     .nav-links a {
-      color: #fff;
+      color: #cbd5e1;
       text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      transition: background 0.3s;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      transition: all 0.3s;
+      transform: translateX(-50%);
     }
 
     .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.2);
+      color: #60a5fa;
+    }
+
+    .nav-links a:hover::after {
+      width: 80%;
     }
 
     .lang-switch {
       display: flex;
-      gap: 5px;
+      gap: 8px;
     }
 
     .lang-btn {
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      border-radius: 6px;
-      color: #fff;
+      padding: 8px 16px;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 8px;
+      color: #60a5fa;
       cursor: pointer;
       font-weight: bold;
       transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
     }
 
     .lang-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
       transform: translateY(-2px);
     }
 
     /* Header */
     header {
-      padding: 80px 30px;
+      padding: 120px 50px 80px;
       text-align: center;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      position: relative;
     }
 
     .logo-container {
-      animation: float 3s ease-in-out infinite;
+      animation: float 4s ease-in-out infinite;
+      position: relative;
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-25px) rotate(5deg); }
     }
 
     header img {
-      width: 150px;
+      width: 180px;
       height: auto;
-      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0 0 40px rgba(96, 165, 250, 0.6));
     }
 
     header h1 {
-      margin: 25px 0 15px;
-      font-size: 3.5rem;
-      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      background: linear-gradient(45deg, #fff, #b6d4ff);
+      margin: 35px 0 20px;
+      font-size: 4rem;
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 80px rgba(96, 165, 250, 0.3);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.4)); }
+      to { filter: drop-shadow(0 0 40px rgba(96, 165, 250, 0.8)); }
     }
 
     .tagline {
-      font-size: 1.3rem;
-      opacity: 0.9;
-      margin-bottom: 30px;
+      font-size: 1.4rem;
+      color: #94a3b8;
+      margin-bottom: 40px;
+      font-weight: 300;
     }
 
     .cta-buttons {
       display: flex;
-      gap: 15px;
+      gap: 20px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 30px;
+      margin-top: 40px;
     }
 
     .btn {
       display: inline-block;
-      padding: 15px 35px;
-      background: rgba(255, 255, 255, 0.2);
+      padding: 18px 40px;
+      background: rgba(59, 130, 246, 0.15);
       border-radius: 12px;
       text-decoration: none;
-      color: #fff;
+      color: #60a5fa;
       font-weight: bold;
       font-size: 1.1rem;
       transition: all 0.3s;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(59, 130, 246, 0.4);
       backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(96, 165, 250, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .btn:hover {
-      background: rgba(255, 255, 255, 0.35);
+      background: rgba(59, 130, 246, 0.3);
       transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 40px rgba(59, 130, 246, 0.4);
+      border-color: #60a5fa;
+    }
+
+    .btn span {
+      position: relative;
+      z-index: 1;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       border: none;
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      box-shadow: 0 0 50px rgba(59, 130, 246, 0.8);
     }
 
     /* Container */
     .container {
-      max-width: 1000px;
-      margin: 60px auto;
-      padding: 0 30px;
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 50px;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(20px);
       border-radius: 20px;
-      padding: 40px;
-      margin-bottom: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s;
+      padding: 50px;
+      margin-bottom: 40px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .card:hover::before {
+      opacity: 1;
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
+      border-color: rgba(59, 130, 246, 0.5);
     }
 
     /* Features Grid */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin: 40px 0;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin: 50px 0;
     }
 
     .feature-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 30px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px;
       text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.4s;
+      position: relative;
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 2px;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .feature-card:hover::after {
+      opacity: 1;
     }
 
     .feature-card:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
     }
 
     .feature-icon {
-      font-size: 3rem;
-      margin-bottom: 15px;
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.5));
     }
 
     h2 {
-      margin: 40px 0 20px;
-      font-size: 2.2rem;
+      margin: 50px 0 30px;
+      font-size: 2.8rem;
       text-align: center;
-      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     h3 {
       margin: 20px 0 15px;
-      font-size: 1.5rem;
-      color: #b6d4ff;
+      font-size: 1.6rem;
+      color: #60a5fa;
+      text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
     }
 
     p, li {
-      line-height: 1.8;
-      font-size: 1.05rem;
-      opacity: 0.95;
+      line-height: 1.9;
+      font-size: 1.1rem;
+      color: #cbd5e1;
     }
 
     ul {
@@ -236,77 +349,107 @@
       padding-left: 0;
     }
 
+    ul li {
+      margin: 15px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+
     ul li:before {
-      content: "⚡ ";
-      margin-right: 8px;
+      content: "⚡";
+      position: absolute;
+      left: 0;
+      color: #60a5fa;
+      filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));
     }
 
     a {
-      color: #b6d4ff;
+      color: #60a5fa;
       text-decoration: none;
-      transition: color 0.3s;
+      transition: all 0.3s;
     }
 
     a:hover {
-      color: #fff;
-      text-decoration: underline;
+      color: #93c5fd;
+      text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
     }
 
     /* Footer */
     footer {
-      margin-top: 80px;
-      padding: 40px 30px;
+      margin-top: 100px;
+      padding: 50px;
       text-align: center;
-      background: rgba(0, 0, 0, 0.3);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(10, 14, 39, 0.8);
+      border-top: 1px solid rgba(59, 130, 246, 0.2);
     }
 
     .footer-links {
       display: flex;
       justify-content: center;
-      gap: 30px;
-      margin-bottom: 20px;
+      gap: 40px;
+      margin-bottom: 25px;
       flex-wrap: wrap;
     }
 
     .footer-links a {
-      color: rgba(255, 255, 255, 0.8);
+      color: #94a3b8;
       font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #60a5fa;
+      transform: translateY(-2px);
     }
 
     /* Responsive */
     @media (max-width: 768px) {
+      nav {
+        padding: 20px;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      header {
+        padding: 80px 30px 60px;
+      }
+
       header h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
       }
 
       .tagline {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
       }
 
-      .cta-buttons {
-        flex-direction: column;
-        align-items: center;
+      .container {
+        padding: 0 30px;
+      }
+
+      .card {
+        padding: 30px;
       }
 
       .nav-links {
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
       }
 
-      nav {
-        flex-direction: column;
-        gap: 15px;
+      .features-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
 
+<div class="bg-overlay"></div>
+
 <nav>
-  <a href="#" class="nav-brand">⚡ Pikachu Bot</a>
+  <a href="#" class="nav-brand">🎫 Ticket System Bot</a>
   <div class="nav-links">
     <a href="#features" id="nav_features">Features</a>
+    <a href="#setup" id="nav_setup">Setup</a>
     <a href="#legal" id="nav_legal">Legal</a>
     <a href="#contact" id="nav_contact">Contact</a>
     <div class="lang-switch">
@@ -318,47 +461,83 @@
 
 <header>
   <div class="logo-container">
-    <img src="pepe.png" alt="Pikachu Bot Logo" />
+    <img src="ticket-logo.png" alt="Ticket System Bot Logo" />
   </div>
-  <h1 id="botname">Pikachu Bot</h1>
-  <p class="tagline" id="tagline">Your ultimate Discord companion for an enhanced server experience</p>
+  <h1 id="botname">Ticket System Bot</h1>
+  <p class="tagline" id="tagline">Professional ticket management for your Discord server</p>
   <div class="cta-buttons">
-    <a class="btn btn-primary" href="https://discord.com/oauth2/authorize?client_id=1448795221180547144&permissions=8&integration_type=0&scope=bot" target="_blank" id="invite">🚀 Invite Bot</a>
-    <a class="btn" href="#features" id="learn_more">Learn More</a>
+    <a class="btn btn-primary" href="https://discord.com/oauth2/authorize?client_id=1454646474649501716&permissions=8&integration_type=0&scope=bot" target="_blank" id="invite"><span>🚀 Invite Bot</span></a>
+    <a class="btn" href="#features" id="learn_more"><span>📖 Learn More</span></a>
+    <a class="btn" href="https://github.com/Reverse666S/ticketbot" target="_blank" id="github"><span>⭐ GitHub</span></a>
   </div>
 </header>
 
 <div class="container">
 
   <section id="features">
-    <h2 id="features_title">Features</h2>
+    <h2 id="features_title">🌟 Features</h2>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">🎮</div>
-        <h3 id="feat1_title">Moderation</h3>
-        <p id="feat1_text">Powerful moderation tools to keep your server safe and organized</p>
-      </div>
-      <div class="feature-card">
         <div class="feature-icon">🎫</div>
-        <h3 id="feat2_title">Tickets</h3>
-        <p id="feat2_text">Add a ticket module to your server</p>
+        <h3 id="feat1_title">Dynamic Tickets</h3>
+        <p id="feat1_text">Unlimited ticket types with custom modals and fields</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🎉</div>
-        <h3 id="feat3_title">Fun Commands</h3>
-        <p id="feat3_text">Entertaining commands to engage your community</p>
+        <div class="feature-icon">🔄</div>
+        <h3 id="feat2_title">Dual Mode</h3>
+        <p id="feat2_text">Choose between Channel or Thread mode</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">⚙️</div>
-        <h3 id="feat4_title">Customizable</h3>
-        <p id="feat4_text">Fully customizable settings to fit your server needs</p>
+        <div class="feature-icon">📊</div>
+        <h3 id="feat3_title">Transcripts</h3>
+        <p id="feat3_text">Automatic HTML transcripts with GitHub Pages upload</p>
       </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 id="feat4_title">Persistent</h3>
+        <p id="feat4_text">Buttons work after bot restart</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3 id="feat5_title">Customizable</h3>
+        <p id="feat5_text">Full control over embeds, colors, and texts</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3 id="feat6_title">Permissions</h3>
+        <p id="feat6_text">Role-based access control system</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="setup">
+    <div class="card">
+      <h2 id="setup_title">⚙️ Quick Setup</h2>
+      <ul>
+        <li id="setup1">Run <strong>/ticket_interactive_setup</strong> for guided configuration</li>
+        <li id="setup2">Create ticket types with <strong>/ticket_type_add</strong></li>
+        <li id="setup3">Choose your mode: Channels or Threads</li>
+        <li id="setup4">Deploy with <strong>/ticket_deploy</strong></li>
+        <li id="setup5">Optional: Setup GitHub transcripts</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2 id="modes_title">🎭 Modes</h2>
+      <h3 id="mode1_title">📁 Channel Mode</h3>
+      <p id="mode1_text">Creates dedicated text channels in a category. Best for high-volume servers.</p>
+      
+      <h3 id="mode2_title" style="margin-top: 30px;">💬 Thread Mode</h3>
+      <p id="mode2_text">Creates threads in a single channel. Perfect for organized, low-volume tickets.</p>
+      
+      <h3 id="mode3_title" style="margin-top: 30px;">🔔 Join Modes</h3>
+      <p id="mode3_text"><strong>Ping:</strong> Supporters are pinged instantly<br><strong>Join-Button:</strong> Supporters join via button</p>
     </div>
   </section>
 
   <section id="legal">
     <div class="card">
-      <h2 id="tos_title">Terms of Service</h2>
+      <h2 id="tos_title">📜 Terms of Service</h2>
       <p id="tos_text">
         By using this Discord bot, you agree that it is provided "as is".
         The bot may be updated, modified, or discontinued at any time without notice.
@@ -367,28 +546,24 @@
     </div>
 
     <div class="card">
-      <h2 id="privacy_title">Privacy Policy</h2>
+      <h2 id="privacy_title">🔐 Privacy Policy</h2>
       <p id="privacy_text">
         This bot processes only the data required for its functionality.
-        Stored data may include Discord user IDs, server IDs, and configuration data.
+        Stored data may include Discord user IDs, server IDs, ticket data, and configuration data.
         No personal data is shared with third parties.
-        Data can be removed upon request.
+        Data can be removed upon request via <strong>/clear_database</strong>.
       </p>
     </div>
 
     <div class="card">
-      <h2 id="impressum_title">Impressum</h2>
+      <h2 id="impressum_title">📋 Impressum</h2>
       <p id="impressum_text">
         <strong id="impressum_resp">Responsible according to § 5 TMG:</strong><br />
-        RandomAuto<br />
+        Nico<br />
         Discord: randomauto<br />
         Contact: carlbot0815@gmail.com<br />
         
-        <strong id="impressum_contact">Contact:</strong><br />
-        Discord: <strong>randomauto</strong><br />
-        E-Mail: <a href="mailto:carlbot0815@gmail.com">carlbot0815@gmail.com</a><br /><br />
-        
-        <strong id="impressum_disclaimer">Disclaimer:</strong><br />
+        <strong id="impressum_disclaimer" style="display: block; margin-top: 20px;">Disclaimer:</strong><br />
         <span id="impressum_disclaimer_text">
           Despite careful content control, we assume no liability for the content of external links. 
           The operators of the linked pages are solely responsible for their content.
@@ -399,10 +574,11 @@
 
   <section id="contact">
     <div class="card">
-      <h2 id="contact_title">Contact</h2>
+      <h2 id="contact_title">📧 Contact</h2>
       <p id="contact_text">
-        Discord: <strong>randomauto</strong><br />
-        Email: <a href="mailto:carlbot0815@gmail.com">carlbot0815@gmail.com</a>
+        Discord: <strong>@randomauto</strong><br />
+        Email: <a href="mailto:carlbot0815@gmail.com">carlbot0815@gmail.com</a><br />
+        GitHub: <a href="https://github.com/Reverse666S" target="_blank">@Reverse666S</a>
       </p>
     </div>
   </section>
@@ -411,73 +587,115 @@
 
 <footer>
   <div class="footer-links">
+    <a href="#features" id="footer_features">Features</a>
+    <a href="#setup" id="footer_setup">Setup</a>
     <a href="#legal">Legal</a>
     <a href="#contact">Contact</a>
-    <a href="https://discord.gg/2wGrmBM35v" target="_blank" id="footer_support">Support Server</a>
+    <a href="/https://discord.gg/zCvdHNRhQ7" target="_blank" id="footer_support">Support Server</a>
   </div>
-  <p>© 2025 Pikachu Bot. All rights reserved.</p>
+  <p>© 2025 Randoms Coding Spot.</p>
 </footer>
 
 <script>
   const translations = {
     en: {
-      botname: "Pikachu Bot",
-      tagline: "Your ultimate Discord companion for an enhanced server experience",
+      botname: "Ticket System Bot",
+      tagline: "Professional ticket management for your Discord server",
       invite: "🚀 Invite Bot",
-      learn_more: "Learn More",
+      learn_more: "📖 Learn More",
+      github: "⭐ GitHub",
       nav_features: "Features",
+      nav_setup: "Setup",
       nav_legal: "Legal",
       nav_contact: "Contact",
-      features_title: "Features",
-      feat1_title: "Moderation",
-      feat1_text: "Powerful moderation tools to keep your server safe and organized",
-      feat2_title: "Tickets",
-      feat2_text: "Add a ticket module to your server",
-      feat3_title: "Fun Commands",
-      feat3_text: "Entertaining commands to engage your community",
-      feat4_title: "Customizable",
-      feat4_text: "Fully customizable settings to fit your server needs",
-      tos_title: "Terms of Service",
+      features_title: "🌟 Features",
+      feat1_title: "Dynamic Tickets",
+      feat1_text: "Unlimited ticket types with custom modals and fields",
+      feat2_title: "Dual Mode",
+      feat2_text: "Choose between Channel or Thread mode",
+      feat3_title: "Transcripts",
+      feat3_text: "Automatic HTML transcripts with GitHub Pages upload",
+      feat4_title: "Persistent",
+      feat4_text: "Buttons work after bot restart",
+      feat5_title: "Customizable",
+      feat5_text: "Full control over embeds, colors, and texts",
+      feat6_title: "Permissions",
+      feat6_text: "Role-based access control system",
+      setup_title: "⚙️ Quick Setup",
+      setup1: "Run <strong>/ticket_interactive_setup</strong> for guided configuration",
+      setup2: "Create ticket types with <strong>/ticket_type_add</strong>",
+      setup3: "Choose your mode: Channels or Threads",
+      setup4: "Deploy with <strong>/ticket_deploy</strong>",
+      setup5: "Optional: Setup GitHub transcripts",
+      modes_title: "🎭 Modes",
+      mode1_title: "📁 Channel Mode",
+      mode1_text: "Creates dedicated text channels in a category. Best for high-volume servers.",
+      mode2_title: "💬 Thread Mode",
+      mode2_text: "Creates threads in a single channel. Perfect for organized, low-volume tickets.",
+      mode3_title: "🔔 Join Modes",
+      mode3_text: "<strong>Ping:</strong> Supporters are pinged instantly<br><strong>Join-Button:</strong> Supporters join via button",
+      tos_title: "📜 Terms of Service",
       tos_text: "By using this Discord bot, you agree that it is provided \"as is\". The bot may be updated, modified, or discontinued at any time without notice. Misuse of the bot may result in restricted access.",
-      privacy_title: "Privacy Policy",
-      privacy_text: "This bot processes only the data required for its functionality. Stored data may include Discord user IDs, server IDs, and configuration data. No personal data is shared with third parties. Data can be removed upon request.",
-      impressum_title: "Impressum",
+      privacy_title: "🔐 Privacy Policy",
+      privacy_text: "This bot processes only the data required for its functionality. Stored data may include Discord user IDs, server IDs, ticket data, and configuration data. No personal data is shared with third parties. Data can be removed upon request via <strong>/clear_database</strong>.",
+      impressum_title: "📋 Impressum",
       impressum_resp: "Responsible according to § 5 TMG:",
-      impressum_contact: "Contact:",
       impressum_disclaimer: "Disclaimer:",
       impressum_disclaimer_text: "Despite careful content control, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content.",
-      contact_title: "Contact",
-      contact_text: "Discord: <strong>randomauto</strong><br />Email: <a href='mailto:carlbot0815@gmail.com'>carlbot0815@gmail.com</a>",
+      contact_title: "📧 Contact",
+      contact_text: "Discord: <strong>yourdiscord</strong><br />Email: <a href='mailto:your@email.com'>your@email.com</a><br />GitHub: <a href='https://github.com/yourusername' target='_blank'>@yourusername</a>",
+      footer_features: "Features",
+      footer_setup: "Setup",
       footer_support: "Support Server"
     },
     de: {
-      botname: "Pikachu Bot",
-      tagline: "Dein ultimativer Discord-Begleiter für ein verbessertes Server-Erlebnis",
+      botname: "Ticket System Bot",
+      tagline: "Professionelle Ticket-Verwaltung für deinen Discord-Server",
       invite: "🚀 Bot einladen",
-      learn_more: "Mehr erfahren",
+      learn_more: "📖 Mehr erfahren",
+      github: "⭐ GitHub",
       nav_features: "Features",
+      nav_setup: "Setup",
       nav_legal: "Rechtliches",
       nav_contact: "Kontakt",
-      features_title: "Features",
-      feat1_title: "Moderation",
-      feat1_text: "Leistungsstarke Moderationswerkzeuge für einen sicheren und organisierten Server",
-      feat2_title: "Tickets",
-      feat2_text: "Füge ein Ticketsystem deinem Server hinzu",
-      feat3_title: "Spaß-Befehle",
-      feat3_text: "Unterhaltsame Befehle für mehr Engagement in deiner Community",
-      feat4_title: "Anpassbar",
-      feat4_text: "Vollständig anpassbare Einstellungen für deine Server-Bedürfnisse",
-      tos_title: "Nutzungsbedingungen",
+      features_title: "🌟 Features",
+      feat1_title: "Dynamische Tickets",
+      feat1_text: "Unbegrenzte Ticket-Typen mit eigenen Modals und Feldern",
+      feat2_title: "Dual-Modus",
+      feat2_text: "Wähle zwischen Channel- oder Thread-Modus",
+      feat3_title: "Transcripts",
+      feat3_text: "Automatische HTML-Transcripts mit GitHub Pages Upload",
+      feat4_title: "Persistent",
+      feat4_text: "Buttons funktionieren nach Bot-Neustart",
+      feat5_title: "Anpassbar",
+      feat5_text: "Volle Kontrolle über Embeds, Farben und Texte",
+      feat6_title: "Berechtigungen",
+      feat6_text: "Rollen-basiertes Zugriffskontrollsystem",
+      setup_title: "⚙️ Schnell-Setup",
+      setup1: "Führe <strong>/ticket_interactive_setup</strong> für geführte Konfiguration aus",
+      setup2: "Erstelle Ticket-Typen mit <strong>/ticket_type_add</strong>",
+      setup3: "Wähle deinen Modus: Channels oder Threads",
+      setup4: "Deploy mit <strong>/ticket_deploy</strong>",
+      setup5: "Optional: GitHub Transcripts einrichten",
+      modes_title: "🎭 Modi",
+      mode1_title: "📁 Channel-Modus",
+      mode1_text: "Erstellt dedizierte Text-Channels in einer Kategorie. Ideal für Server mit vielen Tickets.",
+      mode2_title: "💬 Thread-Modus",
+      mode2_text: "Erstellt Threads in einem einzelnen Channel. Perfekt für organisierte Tickets.",
+      mode3_title: "🔔 Join-Modi",
+      mode3_text: "<strong>Ping:</strong> Supporter werden sofort gepingt<br><strong>Join-Button:</strong> Supporter joinen per Button",
+      tos_title: "📜 Nutzungsbedingungen",
       tos_text: "Durch die Nutzung dieses Discord-Bots erklärst du dich damit einverstanden, dass er ohne Gewähr bereitgestellt wird. Der Bot kann jederzeit geändert oder eingestellt werden. Missbrauch kann zu einem Ausschluss führen.",
-      privacy_title: "Datenschutzerklärung",
-      privacy_text: "Dieser Bot verarbeitet nur Daten, die für seine Funktion notwendig sind. Gespeichert werden können Discord-User-IDs, Server-IDs und Konfigurationsdaten. Es erfolgt keine Weitergabe an Dritte. Daten können auf Anfrage gelöscht werden.",
-      impressum_title: "Impressum",
+      privacy_title: "🔐 Datenschutzerklärung",
+      privacy_text: "Dieser Bot verarbeitet nur Daten, die für seine Funktion notwendig sind. Gespeichert werden können Discord-User-IDs, Server-IDs, Ticket-Daten und Konfigurationsdaten. Es erfolgt keine Weitergabe an Dritte. Daten können auf Anfrage via <strong>/clear_database</strong> gelöscht werden.",
+      impressum_title: "📋 Impressum",
       impressum_resp: "Verantwortlich gemäß § 5 TMG:",
-      impressum_contact: "Kontakt:",
       impressum_disclaimer: "Haftungsausschluss:",
       impressum_disclaimer_text: "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.",
-      contact_title: "Kontakt",
-      contact_text: "Discord: <strong>randomauto</strong><br />E-Mail: <a href='mailto:carlbot0815@gmail.com'>carlbot0815@gmail.com</a>",
+      contact_title: "📧 Kontakt",
+      contact_text: "Discord: <strong>yourdiscord</strong><br />E-Mail: <a href='mailto:your@email.com'>your@email.com</a><br />GitHub: <a href='https://github.com/yourusername' target='_blank'>@yourusername</a>",
+      footer_features: "Features",
+      footer_setup: "Setup",
       footer_support: "Support Server"
     }
   };
@@ -485,50 +703,16 @@
   function setLang(lang) {
     const t = translations[lang];
     
-    // Header
-    document.getElementById('botname').innerText = t.botname;
-    document.getElementById('tagline').innerText = t.tagline;
-    document.getElementById('invite').innerHTML = t.invite;
-    document.getElementById('learn_more').innerText = t.learn_more;
-    
-    // Navigation
-    document.getElementById('nav_features').innerText = t.nav_features;
-    document.getElementById('nav_legal').innerText = t.nav_legal;
-    document.getElementById('nav_contact').innerText = t.nav_contact;
-    
-    // Features
-    document.getElementById('features_title').innerText = t.features_title;
-    document.getElementById('feat1_title').innerText = t.feat1_title;
-    document.getElementById('feat1_text').innerText = t.feat1_text;
-    document.getElementById('feat2_title').innerText = t.feat2_title;
-    document.getElementById('feat2_text').innerText = t.feat2_text;
-    document.getElementById('feat3_title').innerText = t.feat3_title;
-    document.getElementById('feat3_text').innerText = t.feat3_text;
-    document.getElementById('feat4_title').innerText = t.feat4_title;
-    document.getElementById('feat4_text').innerText = t.feat4_text;
-    
-    // Legal
-    document.getElementById('tos_title').innerText = t.tos_title;
-    document.getElementById('tos_text').innerText = t.tos_text;
-    document.getElementById('privacy_title').innerText = t.privacy_title;
-    document.getElementById('privacy_text').innerText = t.privacy_text;
-    
-    // Impressum
-    document.getElementById('impressum_title').innerText = t.impressum_title;
-    document.getElementById('impressum_resp').innerText = t.impressum_resp;
-    document.getElementById('impressum_contact').innerText = t.impressum_contact;
-    document.getElementById('impressum_disclaimer').innerText = t.impressum_disclaimer;
-    document.getElementById('impressum_disclaimer_text').innerText = t.impressum_disclaimer_text;
-    
-    // Contact
-    document.getElementById('contact_title').innerText = t.contact_title;
-    document.getElementById('contact_text').innerHTML = t.contact_text;
-    
-    // Footer
-    document.getElementById('footer_support').innerText = t.footer_support;
+    // Update all text elements
+    Object.keys(t).forEach(key => {
+      const element = document.getElementById(key);
+      if (element) {
+        element.innerHTML = t[key];
+      }
+    });
   }
 
-  // Smooth scroll for anchor links
+  // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
